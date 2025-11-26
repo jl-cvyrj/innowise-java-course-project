@@ -1,4 +1,4 @@
-package by.paulouskaya.webproject.project;
+package by.paulouskaya.webproject;
 
 import java.io.*;
 
