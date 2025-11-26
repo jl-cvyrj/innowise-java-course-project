@@ -1,4 +1,4 @@
-package by.paulouskaya.webproject;
+package by.paulouskaya.webproject.controller;
 
 import java.io.*;
 
