@@ -1,9 +1,11 @@
 package by.paulouskaya.webproject.dao;
 
+import by.paulouskaya.webproject.entity.Order;
+
+import java.util.List;
 import java.util.Objects;
 
-// DAO для заказаў
-public class OrderDao extends AbstractDao {
+public class OrderDao extends AbstractDao<Integer, Order> {
     private int orderNumber;
     private int userId;
     private double totalAmount;
@@ -12,7 +14,6 @@ public class OrderDao extends AbstractDao {
     public int getOrderNumber() {
         return orderNumber;
     }
-
     public void setOrderNumber(int orderNumber) {
         this.orderNumber = orderNumber;
     }
@@ -20,7 +21,6 @@ public class OrderDao extends AbstractDao {
     public int getUserId() {
         return userId;
     }
-
     public void setUserId(int userId) {
         this.userId = userId;
     }
@@ -28,7 +28,6 @@ public class OrderDao extends AbstractDao {
     public double getTotalAmount() {
         return totalAmount;
     }
-
     public void setTotalAmount(double totalAmount) {
         this.totalAmount = totalAmount;
     }
@@ -36,13 +35,42 @@ public class OrderDao extends AbstractDao {
     public String getStatus() {
         return status;
     }
-
     public void setStatus(String status) {
         this.status = status;
     }
 
     public OrderDao(String id) {
         super(id);
+    }
+
+    @Override
+    public List<Order> findAll() {
+        return List.of();
+    }
+
+    @Override
+    public Order findEntityById(Integer id) {
+        return null;
+    }
+
+    @Override
+    public boolean delete(Integer id) {
+        return false;
+    }
+
+    @Override
+    public boolean delete(Order entity) {
+        return false;
+    }
+
+    @Override
+    public boolean create(Order entity) {
+        return false;
+    }
+
+    @Override
+    public Order update(Order entity) {
+        return null;
     }
 
     @Override
@@ -66,23 +94,6 @@ public class OrderDao extends AbstractDao {
         stringBuffer.append(", status='").append(status).append('\'');
         stringBuffer.append('}');
         return stringBuffer.toString();
-    }
-
-    @Override
-    public void insert(Object entity) {
-    }
-
-    @Override
-    public void update(Object entity) {
-    }
-
-    @Override
-    public void delete(Object entity) {
-    }
-
-    @Override
-    public Object findById(int id) {
-        return null;
     }
 }
 

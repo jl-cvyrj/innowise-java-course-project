@@ -1,9 +1,11 @@
 package by.paulouskaya.webproject.dao;
 
-import java.sql.DriverManager;
+import by.paulouskaya.webproject.entity.User;
+
+import java.util.List;
 import java.util.Objects;
 
-public class UserDao extends AbstractDao {
+public class UserDao extends AbstractDao<Integer, User> {
     private String userName;
     private String email;
     private String hashedPassword;
@@ -17,36 +19,46 @@ public class UserDao extends AbstractDao {
         this.role = role;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setUserName(String userName) { this.userName = userName; }
+    public String getUserName() { return userName; }
+
+    public void setEmail(String email) { this.email = email; }
+    public String getEmail() { return email; }
+
+    public String getHashedPassword() { return hashedPassword; }
+    public void setHashedPassword(String hashedPassword) { this.hashedPassword = hashedPassword; }
+
+    public void setRole(String role) { this.role = role; }
+    public String getRole() { return role; }
+
+    @Override
+    public List<User> findAll() {
+        return List.of();
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    @Override
+    public User findEntityById(Integer id) {
+        return null;
     }
 
-    public void setHashedPassword(String hashedPassword) {
-        this.hashedPassword = hashedPassword;
+    @Override
+    public boolean delete(Integer id) {
+        return false;
     }
 
-    public void setRole(String role) {
-        this.role = role;
+    @Override
+    public boolean delete(User entity) {
+        return false;
     }
 
-    public String getEmail() {
-        return email;
+    @Override
+    public boolean create(User entity) {
+        return false;
     }
 
-    public String getUserName() {
-        return userName;
-    }
-
-    public String getHashedPassword() {
-        return hashedPassword;
-    }
-
-    public String getRole() {
-        return role;
+    @Override
+    public User update(User entity) {
+        return null;
     }
 
     @Override
@@ -70,34 +82,5 @@ public class UserDao extends AbstractDao {
         stringBuffer.append(", role='").append(role).append('\'');
         stringBuffer.append('}');
         return stringBuffer.toString();
-    }
-
-    @Override
-    public void insert(Object entity) {
-        UserDao user = (UserDao) entity;
-        String sql = "INSERT INTO users (userName, email, hashedPassword, role) VALUES (?, ?, ?, ?)";
-//        try (Connection conn = DriverManager.getConnection(connectionUrl, username, password);
-//             PreparedStatement stmt = conn.prepareStatement(sql)) {
-//            stmt.setString(1, user.getUserName());
-//            stmt.setString(2, user.getEmail());
-//            stmt.setString(3, user.getHashedPassword());
-//            stmt.setString(4, user.getRole());
-//            stmt.executeUpdate();
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-    }
-
-    @Override
-    public void update(Object entity) {
-    }
-
-    @Override
-    public void delete(Object entity) {
-    }
-
-    @Override
-    public Object findById(int id) {
-        return null;
     }
 }
