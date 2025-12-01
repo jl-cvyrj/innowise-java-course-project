@@ -17,11 +17,7 @@ public class Controller extends HttpServlet {
         try {
             request.getRequestDispatcher("/pages/result.jsp").forward(request, response);
         } catch (ServletException | IOException e) {
-            try {
-                throw new ServletSalonException("Error finding a page or a request");
-            } catch (ServletSalonException ex) {
-                throw new RuntimeException(ex);
-            }
+            
         }
     }
 
