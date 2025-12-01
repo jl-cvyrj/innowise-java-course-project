@@ -17,13 +17,17 @@ public class Controller extends HttpServlet {
         try {
             request.getRequestDispatcher("/pages/result.jsp").forward(request, response);
         } catch (ServletException | IOException e) {
-            
+
         }
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        super.doPost(request, response);
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            super.doPost(request, response);
+        } catch (ServletException | IOException e) {
+
+        }
     }
 
     @Override
