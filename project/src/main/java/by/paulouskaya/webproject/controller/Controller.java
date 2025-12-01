@@ -1,5 +1,6 @@
 package by.paulouskaya.webproject.controller;
 
+import by.paulouskaya.webproject.exception.ServletSalonException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -11,9 +12,17 @@ import java.io.IOException;
 @WebServlet(name = "ControllerServlet", value = "/controller")
 public class Controller extends HttpServlet {
     @Override
-    public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    public void doGet(HttpServletRequest request, HttpServletResponse response) {
         response.getContentType();
-        request.getRequestDispatcher("/pages/result.jsp").forward(request,response);
+        try {
+            request.getRequestDispatcher("/pages/result.jsp").forward(request, response);
+        } catch (ServletException | IOException e) {
+            try {
+                throw new ServletSalonException("Error finding a page or a request");
+            } catch (ServletSalonException ex) {
+                throw new RuntimeException(ex);
+            }
+        }
     }
 
     @Override
