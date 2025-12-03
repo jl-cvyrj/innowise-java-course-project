@@ -1,13 +1,13 @@
-package by.paulouskaya.webproject.entity;
+package by.paulouskaya.webproject.model;
 
-public class User extends BeautySalonEntity {
-    private int id;
+public class UserModel {
+    private long id;
     private String userName;
     private String email;
     private String hashedPassword;
     private String role;
 
-    public User(int id, String userName, String email, String hashedPassword, String role) {
+    public UserModel(long id, String userName, String email, String hashedPassword, String role) {
         this.id = id;
         this.userName = userName;
         this.email = email;
@@ -15,8 +15,8 @@ public class User extends BeautySalonEntity {
         this.role = role;
     }
 
-    public int getId() { return id; }
-    public void setId(int id) { this.id = id; }
+    public long getUserId() { return id; }
+    public void setUserId(int id) { this.id = id; }
 
     public String getUserName() { return userName; }
     public void setUserName(String userName) { this.userName = userName; }

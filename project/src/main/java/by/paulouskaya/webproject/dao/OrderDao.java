@@ -1,11 +1,12 @@
 package by.paulouskaya.webproject.dao;
 
-import by.paulouskaya.webproject.entity.Order;
+import by.paulouskaya.webproject.model.OrderModel;
+import by.paulouskaya.webproject.model.OrderModel;
 
 import java.util.List;
 import java.util.Objects;
 
-public class OrderDao extends AbstractDao<Integer, Order> {
+public class OrderDao extends AbstractDao<Integer, OrderModel> {
     private int orderNumber;
     private int userId;
     private double totalAmount;
@@ -44,12 +45,12 @@ public class OrderDao extends AbstractDao<Integer, Order> {
     }
 
     @Override
-    public List<Order> findAll() {
+    public List<OrderModel> findAll() {
         return List.of();
     }
 
     @Override
-    public Order findEntityById(Integer id) {
+    public OrderModel findEntityById(Integer id) {
         return null;
     }
 
@@ -59,17 +60,12 @@ public class OrderDao extends AbstractDao<Integer, Order> {
     }
 
     @Override
-    public boolean delete(Order entity) {
+    public boolean create(OrderModel entity) {
         return false;
     }
 
     @Override
-    public boolean create(Order entity) {
-        return false;
-    }
-
-    @Override
-    public Order update(Order entity) {
+    public OrderModel update(OrderModel entity) {
         return null;
     }
 

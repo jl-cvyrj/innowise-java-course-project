@@ -1,10 +1,8 @@
 package by.paulouskaya.webproject.dao;
 
-import by.paulouskaya.webproject.entity.BeautySalonEntity;
-
 import java.util.List;
 
-public abstract class AbstractDao <K, T extends BeautySalonEntity> {
+public abstract class AbstractDao <K, T> {
     protected String id;
     protected String connectionUrl;
     protected String username;
@@ -17,7 +15,6 @@ public abstract class AbstractDao <K, T extends BeautySalonEntity> {
     public abstract List<T> findAll();
     public abstract T findEntityById(K id);
     public abstract boolean delete(K id);
-    public abstract boolean delete(T entity);
     public abstract boolean create(T entity);
     public abstract T update(T entity);
 }

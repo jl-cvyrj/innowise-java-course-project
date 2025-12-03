@@ -1,20 +1,24 @@
-package by.paulouskaya.webproject.entity;
+package by.paulouskaya.webproject.model;
 
-public class Order extends BeautySalonEntity {
+public class OrderModel {
+    private int orderId;
     private int clientId;
     private int serviceId;
     private String date;
     private double totalAmount;
     private String status;
 
-    public Order(int id, int clientId, int serviceId, String date, double totalAmount, String status) {
-        this.id = id;
+    public OrderModel(int id, int clientId, int serviceId, String date, double totalAmount, String status) {
+        this.orderId = id;
         this.clientId = clientId;
         this.serviceId = serviceId;
         this.date = date;
         this.totalAmount = totalAmount;
         this.status = status;
     }
+
+    public int getOrderId() { return clientId; }
+    public void setOrderId(int clientId) { this.clientId = clientId; }
 
     public int getClientId() { return clientId; }
     public void setClientId(int clientId) { this.clientId = clientId; }

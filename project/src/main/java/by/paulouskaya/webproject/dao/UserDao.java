@@ -1,86 +1,85 @@
 package by.paulouskaya.webproject.dao;
 
-import by.paulouskaya.webproject.entity.User;
+import by.paulouskaya.webproject.model.UserModel;
+import java.util.*;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
-import java.util.List;
-import java.util.Objects;
+public class UserDao extends AbstractDao<Integer, UserModel> {
+    private static final Logger logger = LogManager.getLogger(UserDao.class.getName());
 
-public class UserDao extends AbstractDao<Integer, User> {
-    private String userName;
-    private String email;
-    private String hashedPassword;
-    private String role;
+    private static final Map<Integer, UserModel> users = new HashMap<>();
+    private static int nextId = 1;
 
-    public UserDao(String id, String userName, String email, String hashedPassword, String role) {
-        super(id);
-        this.userName = userName;
-        this.email = email;
-        this.hashedPassword = hashedPassword;
-        this.role = role;
+    public UserDao() {
+        super("user_id");
     }
 
-    public void setUserName(String userName) { this.userName = userName; }
-    public String getUserName() { return userName; }
+    public UserModel findByUserName(String userName) {
+        logger.info("Searching user by: " + userName);
 
-    public void setEmail(String email) { this.email = email; }
-    public String getEmail() { return email; }
-
-    public String getHashedPassword() { return hashedPassword; }
-    public void setHashedPassword(String hashedPassword) { this.hashedPassword = hashedPassword; }
-
-    public void setRole(String role) { this.role = role; }
-    public String getRole() { return role; }
-
-    @Override
-    public List<User> findAll() {
-        return List.of();
-    }
-
-    @Override
-    public User findEntityById(Integer id) {
+        for (UserModel user : users.values()) {
+            if (user.getUserName().equalsIgnoreCase(userName)) {
+                return user;
+            }
+        }
         return null;
+    }
+
+    public boolean save(UserModel user) {
+        try {
+            if (user.getUserId() == null) {
+                user.getUserId((long) nextId++);
+            }
+
+            users.put(user.getUserId().longValue(), user);
+            logger.info("User saved: " + user.getUserName() + " (ID: " + user.getUserId() + ")");
+            return true;
+        } catch (Exception e) {
+            logger.error("Error saving user: " + e.getMessage());
+            return false;
+        }
+    }
+
+    public boolean existsByUsername(String username) {
+        for (UserModel user : users.values()) {
+            if (user.getUserName().equalsIgnoreCase(username)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean existsByEmail(String email) {
+        for (UserModel user : users.values()) {
+            if (user.getEmail().equalsIgnoreCase(email)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public List<UserModel> findAll() {
+        List<UserModel> userList = new ArrayList<>();
+        for (UserModel user : users.values()) {
+            userList.add(user);
+        }
+        return userList;
+    }
+
+    @Override
+    public UserModel findEntityById(Integer id) {
+        return users.get(id);
     }
 
     @Override
     public boolean delete(Integer id) {
+        UserModel removed = users.remove(id);
+        if (removed != null) {
+            logger.info("User deleted: " + removed.getUserId());
+            return true;
+        }
         return false;
-    }
-
-    @Override
-    public boolean delete(User entity) {
-        return false;
-    }
-
-    @Override
-    public boolean create(User entity) {
-        return false;
-    }
-
-    @Override
-    public User update(User entity) {
-        return null;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (o == null || getClass() != o.getClass()) return false;
-        UserDao userDao = (UserDao) o;
-        return Objects.equals(userName, userDao.userName) && Objects.equals(email, userDao.email) && Objects.equals(hashedPassword, userDao.hashedPassword) && Objects.equals(role, userDao.role);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(userName, email, hashedPassword, role);
-    }
-
-    @Override
-    public String toString() {
-        final StringBuffer stringBuffer = new StringBuffer("UserDao{");
-        stringBuffer.append("userName='").append(userName).append('\'');
-        stringBuffer.append(", email='").append(email).append('\'');
-        stringBuffer.append(", hashedPassword='").append(hashedPassword).append('\'');
-        stringBuffer.append(", role='").append(role).append('\'');
-        stringBuffer.append('}');
-        return stringBuffer.toString();
     }
 }
