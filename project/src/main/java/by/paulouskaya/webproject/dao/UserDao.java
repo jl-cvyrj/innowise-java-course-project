@@ -8,7 +8,7 @@ import org.apache.logging.log4j.Logger;
 public class UserDao extends AbstractDao<Integer, UserModel> {
     private static final Logger logger = LogManager.getLogger(UserDao.class.getName());
 
-    private static final Map<Integer, UserModel> users = new HashMap<>();
+    private static final Map<Integer, UserModel> userMap = new HashMap<>();
     private static int nextId = 1;
 
     public UserDao() {
@@ -18,7 +18,7 @@ public class UserDao extends AbstractDao<Integer, UserModel> {
     public UserModel findByUserName(String userName) {
         logger.info("Searching user by: " + userName);
 
-        for (UserModel user : users.values()) {
+        for (UserModel user : userMap.values()) {
             if (user.getUserName().equalsIgnoreCase(userName)) {
                 return user;
             }
@@ -26,23 +26,8 @@ public class UserDao extends AbstractDao<Integer, UserModel> {
         return null;
     }
 
-    public boolean save(UserModel user) {
-        try {
-            if (user.getUserId() == null) {
-                user.getUserId((long) nextId++);
-            }
-
-            users.put(user.getUserId().longValue(), user);
-            logger.info("User saved: " + user.getUserName() + " (ID: " + user.getUserId() + ")");
-            return true;
-        } catch (Exception e) {
-            logger.error("Error saving user: " + e.getMessage());
-            return false;
-        }
-    }
-
     public boolean existsByUsername(String username) {
-        for (UserModel user : users.values()) {
+        for (UserModel user : userMap.values()) {
             if (user.getUserName().equalsIgnoreCase(username)) {
                 return true;
             }
@@ -51,7 +36,7 @@ public class UserDao extends AbstractDao<Integer, UserModel> {
     }
 
     public boolean existsByEmail(String email) {
-        for (UserModel user : users.values()) {
+        for (UserModel user : userMap.values()) {
             if (user.getEmail().equalsIgnoreCase(email)) {
                 return true;
             }
@@ -62,7 +47,7 @@ public class UserDao extends AbstractDao<Integer, UserModel> {
     @Override
     public List<UserModel> findAll() {
         List<UserModel> userList = new ArrayList<>();
-        for (UserModel user : users.values()) {
+        for (UserModel user : userMap.values()) {
             userList.add(user);
         }
         return userList;
@@ -70,16 +55,26 @@ public class UserDao extends AbstractDao<Integer, UserModel> {
 
     @Override
     public UserModel findEntityById(Integer id) {
-        return users.get(id);
+        return userMap.get(id);
     }
 
     @Override
     public boolean delete(Integer id) {
-        UserModel removed = users.remove(id);
+        UserModel removed = userMap.remove(id);
         if (removed != null) {
             logger.info("User deleted: " + removed.getUserId());
             return true;
         }
         return false;
+    }
+
+    @Override
+    public boolean create(UserModel entity) {
+        return false;
+    }
+
+    @Override
+    public UserModel update(UserModel entity) {
+        return null;
     }
 }
