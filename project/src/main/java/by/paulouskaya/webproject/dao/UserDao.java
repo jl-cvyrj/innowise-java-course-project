@@ -1,5 +1,6 @@
 package by.paulouskaya.webproject.dao;
 
+import by.paulouskaya.webproject.exception.DaoException;
 import by.paulouskaya.webproject.model.UserModel;
 import java.util.*;
 import org.apache.logging.log4j.LogManager;
@@ -15,15 +16,23 @@ public class UserDao extends AbstractDao<Integer, UserModel> {
         super("user_id");
     }
 
-    public UserModel findByUserName(String userName) {
-        logger.info("Searching user by: " + userName);
+    public UserModel findByUserName(String userName) throws DaoException {
+        logger.info("Searching user by: {}", userName);
 
         for (UserModel user : userMap.values()) {
             if (user.getUserName().equalsIgnoreCase(userName)) {
                 return user;
             }
         }
-        return null;
+        throw new DaoException("User not found: " + userName);
+    }
+
+    public UserModel findById(Long id) throws DaoException {
+        UserModel user = userMap.get(id.intValue());
+        if (user == null) {
+            throw new DaoException("User not found with ID: " + id);
+        }
+        return user;
     }
 
     public boolean existsByUsername(String username) {
@@ -44,13 +53,40 @@ public class UserDao extends AbstractDao<Integer, UserModel> {
         return false;
     }
 
+    public UserModel save(UserModel user) {
+        if (user.getUserId() == 0) {
+            Integer newId = nextId++;
+            UserModel newUser = new UserModel(
+                newId.longValue(),
+                user.getUserName(),
+                user.getEmail(),
+                user.getHashedPassword(),
+                user.getRole()
+            );
+            userMap.put(newId, newUser);
+            logger.info("User created: " + newUser.getUserId());
+            return newUser;
+        } else {
+            userMap.put((int)user.getUserId(), user);
+            logger.info("User updated: " + user.getUserId());
+            return user;
+        }
+    }
+
+    public boolean updatePassword(Long userId, String newPasswordHash) throws DaoException {
+        UserModel user = findById(userId);
+        if (user != null) {
+            user.setHashedPassword(newPasswordHash);
+            userMap.put(userId.intValue(), user);
+            logger.info("Password updated for user: " + userId);
+            return true;
+        }
+        return false;
+    }
+
     @Override
     public List<UserModel> findAll() {
-        List<UserModel> userList = new ArrayList<>();
-        for (UserModel user : userMap.values()) {
-            userList.add(user);
-        }
-        return userList;
+        return new ArrayList<>(userMap.values());
     }
 
     @Override
@@ -62,7 +98,7 @@ public class UserDao extends AbstractDao<Integer, UserModel> {
     public boolean delete(Integer id) {
         UserModel removed = userMap.remove(id);
         if (removed != null) {
-            logger.info("User deleted: " + removed.getUserId());
+            logger.info("User deleted: {}", removed.getUserId());
             return true;
         }
         return false;
@@ -70,11 +106,12 @@ public class UserDao extends AbstractDao<Integer, UserModel> {
 
     @Override
     public boolean create(UserModel entity) {
-        return false;
+        save(entity);
+        return true;
     }
 
     @Override
     public UserModel update(UserModel entity) {
-        return null;
+        return save(entity);
     }
 }
