@@ -22,31 +22,14 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@WebServlet(name = "BookingServlet", value = "/bookings/*")
+@WebServlet(name = "BookingServlet", value = "/booking/*")
 public class BookingServlet extends HttpServlet {
     private static final Logger logger = LogManager.getLogger(BookingServlet.class);
 
-    private static final String DATE_TIME_PATTERN = "yyyy-MM-dd'T'HH:mm";
-    private static final String SLASH = "/";
-    private static final String EMPTY_PATH = "/";
-    private static final String NEW_PATH = "/new";
-    private static final String USERNAME_ATTRIBUTE = "username";
-    private static final String USER_ID_ATTRIBUTE = "userId";
-    private static final String USER_ATTRIBUTE = "user";
-    private static final String ERROR_ATTRIBUTE = "error";
-    private static final String BOOKING_ATTRIBUTE = "booking";
-    private static final String PET_TYPE_PARAM = "petType";
-    private static final String SERVICES_PARAM = "services";
-    private static final String PREFERRED_DATE_PARAM = "preferredDate";
-    private static final String NOTES_PARAM = "notes";
-    private static final String BOOKINGS_JSP = "/pages/bookings.jsp";
-    private static final String NEW_BOOKING_JSP = "/pages/new-booking.jsp";
-    private static final String REDIRECT_LOGIN_PATH = "/login";
-    private static final String BOOKINGS_PATH_PREFIX = "/bookings/";
+    private static final DateTimeFormatter DATE_TIME_FORMATTER =
+            DateTimeFormatter.ofPattern(ServletParameter.DATE_TIME_PATTERN);
 
     private BookingService bookingService;
-    private static final DateTimeFormatter DATE_TIME_FORMATTER =
-            DateTimeFormatter.ofPattern(DATE_TIME_PATTERN);
 
     @Override
     public void init() {
@@ -62,33 +45,33 @@ public class BookingServlet extends HttpServlet {
         logger.info("GET /bookings request from IP: {}", clientIp);
 
         HttpSession session = request.getSession(false);
-        if (session == null || session.getAttribute(USER_ATTRIBUTE) == null) {
+        if (session == null || session.getAttribute(ServletParameter.USER_ATTRIBUTE) == null) {
             logger.warn("Unauthorized access attempt to /bookings from IP: {}", clientIp);
-            response.sendRedirect(request.getContextPath() + REDIRECT_LOGIN_PATH);
+            response.sendRedirect(request.getContextPath() + ServletParameter.REDIRECT_LOGIN_PATH);
             return;
         }
 
-        String username = (String) session.getAttribute(USERNAME_ATTRIBUTE);
+        String username = (String) session.getAttribute(ServletParameter.USERNAME_ATTRIBUTE);
         String pathInfo = request.getPathInfo();
 
-        if (pathInfo == null || pathInfo.equals(EMPTY_PATH)) {
-            Long userId = (Long) session.getAttribute(USER_ID_ATTRIBUTE);
+        if (pathInfo == null || pathInfo.equals(ServletParameter.EMPTY_PATH)) {
+            Long userId = (Long) session.getAttribute(ServletParameter.USER_ID_ATTRIBUTE);
             logger.info("User {} (ID: {}) viewing bookings", username, userId);
 
             try {
                 List<BookingModel> bookingList = bookingService.getUserBookings(userId);
                 logger.info("Found {} bookings for user {}", bookingList.size(), username);
-                request.setAttribute(BOOKING_ATTRIBUTE, bookingList);
-                request.getRequestDispatcher(BOOKINGS_JSP).forward(request, response);
+                request.setAttribute(ServletParameter.BOOKING_ATTRIBUTE, bookingList);
+                request.getRequestDispatcher(ServletParameter.BOOKINGS_JSP).forward(request, response);
             } catch (ServiceException e) {
                 logger.error("Failed to get bookings for user {}: {}", username, e.getMessage());
-                request.setAttribute(ERROR_ATTRIBUTE, "Failed to load bookings");
-                request.getRequestDispatcher(BOOKINGS_JSP).forward(request, response);
+                request.setAttribute(ServletParameter.ERROR_ATTRIBUTE, "Failed to load bookings");
+                request.getRequestDispatcher(ServletParameter.BOOKINGS_JSP).forward(request, response);
             }
 
-        } else if (pathInfo.equals(NEW_PATH)) {
+        } else if (pathInfo.equals(ServletParameter.NEW_PATH)) {
             logger.info("User {} accessing new booking form", username);
-            request.getRequestDispatcher(NEW_BOOKING_JSP).forward(request, response);
+            request.getRequestDispatcher(ServletParameter.NEW_BOOKING_JSP).forward(request, response);
         }
     }
 
@@ -100,24 +83,24 @@ public class BookingServlet extends HttpServlet {
         logger.info("POST /bookings request from IP: {}", clientIp);
 
         HttpSession session = request.getSession(false);
-        if (session == null || session.getAttribute(USER_ATTRIBUTE) == null) {
+        if (session == null || session.getAttribute(ServletParameter.USER_ATTRIBUTE) == null) {
             logger.warn("Unauthorized booking creation attempt from IP: {}", clientIp);
             try {
-                response.sendRedirect(request.getContextPath() + REDIRECT_LOGIN_PATH);
+                response.sendRedirect(request.getContextPath() + ServletParameter.REDIRECT_LOGIN_PATH);
             } catch (IOException e) {
                 logger.error("Failed to send redirect to login page", e);
             }
             return;
         }
 
-        Long userId = (Long) session.getAttribute(USER_ID_ATTRIBUTE);
-        String username = (String) session.getAttribute(USERNAME_ATTRIBUTE);
+        Long userId = (Long) session.getAttribute(ServletParameter.USER_ID_ATTRIBUTE);
+        String username = (String) session.getAttribute(ServletParameter.USERNAME_ATTRIBUTE);
 
         try {
-            String petTypeStr = request.getParameter(PET_TYPE_PARAM);
-            String[] serviceStringList = request.getParameterValues(SERVICES_PARAM);
-            String preferredDateString = request.getParameter(PREFERRED_DATE_PARAM);
-            String notes = request.getParameter(NOTES_PARAM);
+            String petTypeStr = request.getParameter(ServletParameter.PET_TYPE_PARAM);
+            String[] serviceStringList = request.getParameterValues(ServletParameter.SERVICES_PARAM);
+            String preferredDateString = request.getParameter(ServletParameter.PREFERRED_DATE_PARAM);
+            String notes = request.getParameter(ServletParameter.NOTES_PARAM);
 
             if (petTypeStr == null || petTypeStr.isBlank()) {
                 throw new IllegalArgumentException("Pet type is required");
@@ -146,17 +129,17 @@ public class BookingServlet extends HttpServlet {
             logger.info("Booking created successfully - ID: {} for user {}",
                     booking.getBookingId(), username);
 
-            response.sendRedirect(request.getContextPath() + BOOKINGS_PATH_PREFIX + booking.getBookingId());
+            response.sendRedirect(request.getContextPath() + ServletParameter.BOOKINGS_PATH_PREFIX + booking.getBookingId());
 
         } catch (IllegalArgumentException e) {
             logger.warn("Invalid booking data from user {}: {}", username, e.getMessage());
-            request.setAttribute(ERROR_ATTRIBUTE, e.getMessage());
-            request.getRequestDispatcher(NEW_BOOKING_JSP).forward(request, response);
+            request.setAttribute(ServletParameter.ERROR_ATTRIBUTE, e.getMessage());
+            request.getRequestDispatcher(ServletParameter.NEW_BOOKING_JSP).forward(request, response);
 
         } catch (ServiceException e) {
             logger.error("Failed to create booking for user {}: {}", username, e.getMessage());
-            request.setAttribute(ERROR_ATTRIBUTE, "Failed to create booking: " + e.getMessage());
-            request.getRequestDispatcher(NEW_BOOKING_JSP).forward(request, response);
+            request.setAttribute(ServletParameter.ERROR_ATTRIBUTE, "Failed to create booking: " + e.getMessage());
+            request.getRequestDispatcher(ServletParameter.NEW_BOOKING_JSP).forward(request, response);
         }
     }
 }
