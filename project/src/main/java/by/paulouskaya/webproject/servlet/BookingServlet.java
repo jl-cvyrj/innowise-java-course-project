@@ -123,7 +123,7 @@ public class BookingServlet extends HttpServlet {
                     username, petType, serviceList.size(), preferredDate);
 
             BookingModel booking = bookingService.createBooking(
-                    userId, petType, serviceList, preferredDate, notes
+                    bookingId, userId, petType, serviceList, preferredDate, notes
             );
 
             logger.info("Booking created successfully - ID: {} for user {}",

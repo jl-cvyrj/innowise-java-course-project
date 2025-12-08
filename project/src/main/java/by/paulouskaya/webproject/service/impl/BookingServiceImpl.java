@@ -1,5 +1,6 @@
 package by.paulouskaya.webproject.service.impl;
 
+import by.paulouskaya.webproject.exception.DaoException;
 import by.paulouskaya.webproject.model.BookingModel;
 import by.paulouskaya.webproject.model.PetType;
 import by.paulouskaya.webproject.model.ServiceType;
@@ -33,7 +34,7 @@ public class BookingServiceImpl implements BookingService {
 
             return bookingDaoImpl.save(booking);
 
-        } catch (Exception e) {
+        } catch (DaoException e) {
             throw new ServiceException("Failed to create booking", e);
         }
     }
@@ -42,7 +43,7 @@ public class BookingServiceImpl implements BookingService {
     public List<BookingModel> getUserBookings(Long userId) throws ServiceException {
         try {
             return bookingDaoImpl.findByUserId(userId);
-        } catch (Exception e) {
+        } catch (DaoException e) {
             throw new ServiceException("Failed to get user bookings", e);
         }
     }
@@ -55,7 +56,7 @@ public class BookingServiceImpl implements BookingService {
                 throw new ServiceException("Booking not found: " + bookingId);
             }
             return booking;
-        } catch (Exception e) {
+        } catch (DaoException e) {
             throw new ServiceException("Failed to get booking", e);
         }
     }
@@ -77,7 +78,7 @@ public class BookingServiceImpl implements BookingService {
             bookingDaoImpl.update(booking);
             return true;
 
-        } catch (Exception e) {
+        } catch (DaoException e) {
             throw new ServiceException("Failed to cancel booking", e);
         }
     }
@@ -86,7 +87,7 @@ public class BookingServiceImpl implements BookingService {
     public List<BookingModel> getAllBookings() throws ServiceException {
         try {
             return bookingDaoImpl.findAll();
-        } catch (Exception e) {
+        } catch (DaoException e) {
             throw new ServiceException("Failed to get all bookings", e);
         }
     }
@@ -107,7 +108,7 @@ public class BookingServiceImpl implements BookingService {
             bookingDaoImpl.update(booking);
             return true;
 
-        } catch (Exception e) {
+        } catch (DaoException e) {
             throw new ServiceException("Failed to confirm booking", e);
         }
     }
@@ -123,7 +124,7 @@ public class BookingServiceImpl implements BookingService {
             bookingDaoImpl.update(booking);
             return true;
 
-        } catch (Exception e) {
+        } catch (DaoException e) {
             throw new ServiceException("Failed to schedule booking", e);
         }
     }
@@ -144,7 +145,7 @@ public class BookingServiceImpl implements BookingService {
             bookingDaoImpl.update(booking);
             return true;
 
-        } catch (Exception e) {
+        } catch (DaoException e) {
             throw new ServiceException("Failed to reject booking", e);
         }
     }
@@ -165,7 +166,7 @@ public class BookingServiceImpl implements BookingService {
             bookingDaoImpl.update(booking);
             return true;
 
-        } catch (Exception e) {
+        } catch (DaoException e) {
             throw new ServiceException("Failed to complete booking", e);
         }
     }
