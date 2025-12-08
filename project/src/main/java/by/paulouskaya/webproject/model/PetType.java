@@ -1,4 +1,3 @@
-// PetType.java
 package by.paulouskaya.webproject.model;
 
 public enum PetType {
