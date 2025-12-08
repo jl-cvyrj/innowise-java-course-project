@@ -1,13 +1,24 @@
 package by.paulouskaya.webproject.model;
 
+import jakarta.jws.soap.SOAPBinding;
+
 public class UserModel {
+    private static final String STRING_BUFFER_START = "UserModel{";
+    private static final String HASHED_PASSWORD_FIELD = "hashedPassword='";
+    private static final String ROLE_FIELD = ", role='";
+    private static final String EMAIL_FIELD = ", email='";
+    private static final String ID_FIELD = ", id=";
+    private static final String USER_NAME_FIELD = ", userName='";
+    private static final char SINGLE_QUOTE = '\'';
+    private static final char CLOSING_BRACE = '}';
+
     private long id;
     private String userName;
     private String email;
     private String hashedPassword;
-    private String role;
+    private UserRole role;
 
-    public UserModel(long id, String userName, String email, String hashedPassword, String role) {
+    public UserModel(long id, String userName, String email, String hashedPassword, UserRole role) {
         this.id = id;
         this.userName = userName;
         this.email = email;
@@ -27,6 +38,18 @@ public class UserModel {
     public String getHashedPassword() { return hashedPassword; }
     public void setHashedPassword(String hashedPassword) { this.hashedPassword = hashedPassword; }
 
-    public String getRole() { return role; }
-    public void setRole(String role) { this.role = role; }
+    public UserRole getRole() { return role; }
+    public void setRole(UserRole role) { this.role = role; }
+
+    @Override
+    public String toString() {
+        final StringBuffer stringBuffer = new StringBuffer(STRING_BUFFER_START);
+        stringBuffer.append(HASHED_PASSWORD_FIELD).append(hashedPassword).append(SINGLE_QUOTE);
+        stringBuffer.append(ROLE_FIELD).append(role).append(SINGLE_QUOTE);
+        stringBuffer.append(EMAIL_FIELD).append(email).append(SINGLE_QUOTE);
+        stringBuffer.append(ID_FIELD).append(id);
+        stringBuffer.append(USER_NAME_FIELD).append(userName).append(SINGLE_QUOTE);
+        stringBuffer.append(CLOSING_BRACE);
+        return stringBuffer.toString();
+    }
 }

@@ -18,7 +18,20 @@
     </properties>
 
     <dependencies>
-
+        <dependency>
+            <groupId>com.example</groupId>
+            <artifactId>library</artifactId>
+            <version>1.0</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/log4j-api-2.23.1.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>com.example</groupId>
+            <artifactId>library</artifactId>
+            <version>1.0</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/log4j-core-2.23.1.jar</systemPath>
+        </dependency>
         <dependency>
             <groupId>jakarta.ws.rs</groupId>
             <artifactId>jakarta.ws.rs-api</artifactId>

@@ -2,116 +2,18 @@ package by.paulouskaya.webproject.dao;
 
 import by.paulouskaya.webproject.exception.DaoException;
 import by.paulouskaya.webproject.model.UserModel;
-import java.util.*;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import java.util.List;
 
-public class UserDao extends AbstractDao<Integer, UserModel> {
-    private static final Logger logger = LogManager.getLogger(UserDao.class.getName());
-
-    private static final Map<Integer, UserModel> userMap = new HashMap<>();
-    private static int nextId = 1;
-
-    public UserDao() {
-        super("user_id");
-    }
-
-    public UserModel findByUserName(String userName) throws DaoException {
-        logger.info("Searching user by: {}", userName);
-
-        for (UserModel user : userMap.values()) {
-            if (user.getUserName().equalsIgnoreCase(userName)) {
-                return user;
-            }
-        }
-        throw new DaoException("User not found: " + userName);
-    }
-
-    public UserModel findById(Long id) throws DaoException {
-        UserModel user = userMap.get(id.intValue());
-        if (user == null) {
-            throw new DaoException("User not found with ID: " + id);
-        }
-        return user;
-    }
-
-    public boolean existsByUsername(String username) {
-        for (UserModel user : userMap.values()) {
-            if (user.getUserName().equalsIgnoreCase(username)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public boolean existsByEmail(String email) {
-        for (UserModel user : userMap.values()) {
-            if (user.getEmail().equalsIgnoreCase(email)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public UserModel save(UserModel user) {
-        if (user.getUserId() == 0) {
-            Integer newId = nextId++;
-            UserModel newUser = new UserModel(
-                newId.longValue(),
-                user.getUserName(),
-                user.getEmail(),
-                user.getHashedPassword(),
-                user.getRole()
-            );
-            userMap.put(newId, newUser);
-            logger.info("User created: " + newUser.getUserId());
-            return newUser;
-        } else {
-            userMap.put((int)user.getUserId(), user);
-            logger.info("User updated: " + user.getUserId());
-            return user;
-        }
-    }
-
-    public boolean updatePassword(Long userId, String newPasswordHash) throws DaoException {
-        UserModel user = findById(userId);
-        if (user != null) {
-            user.setHashedPassword(newPasswordHash);
-            userMap.put(userId.intValue(), user);
-            logger.info("Password updated for user: " + userId);
-            return true;
-        }
-        return false;
-    }
-
-    @Override
-    public List<UserModel> findAll() {
-        return new ArrayList<>(userMap.values());
-    }
-
-    @Override
-    public UserModel findEntityById(Integer id) {
-        return userMap.get(id);
-    }
-
-    @Override
-    public boolean delete(Integer id) {
-        UserModel removed = userMap.remove(id);
-        if (removed != null) {
-            logger.info("User deleted: {}", removed.getUserId());
-            return true;
-        }
-        return false;
-    }
-
-    @Override
-    public boolean create(UserModel entity) {
-        save(entity);
-        return true;
-    }
-
-    @Override
-    public UserModel update(UserModel entity) {
-        return save(entity);
-    }
+public interface UserDao {
+    UserModel findByUserName(String userName) throws DaoException;
+    UserModel findById(Long id) throws DaoException;
+    boolean existsByUsername(String username) throws DaoException;
+    boolean existsByEmail(String email) throws DaoException;
+    UserModel save(UserModel user) throws DaoException;
+    boolean updatePassword(Long userId, String newPasswordHash) throws DaoException;
+    List<UserModel> findAll() throws DaoException;
+    UserModel findEntityById(Integer id) throws DaoException;
+    boolean delete(Integer id) throws DaoException;
+    boolean create(UserModel entity) throws DaoException;
+    UserModel update(UserModel entity) throws DaoException;
 }
