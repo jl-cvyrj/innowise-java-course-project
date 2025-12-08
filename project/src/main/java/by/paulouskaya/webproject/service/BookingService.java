@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface BookingService {
 
-    BookingModel createBooking(Long userId, PetType petType, List<ServiceType> services,
+    BookingModel createBooking(Long bookingId, Long userId, PetType petType, List<ServiceType> services,
                                LocalDateTime preferredDate, String notes) throws ServiceException;
     List<BookingModel> getUserBookings(Long userId) throws ServiceException;
     BookingModel getBookingById(Long bookingId) throws ServiceException;

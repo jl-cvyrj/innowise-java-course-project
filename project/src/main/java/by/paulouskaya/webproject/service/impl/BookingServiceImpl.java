@@ -18,11 +18,11 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public BookingModel createBooking(Long userId, PetType petType, List<ServiceType> services,
+    public BookingModel createBooking(Long bookingId, Long userId, PetType petType, List<ServiceType> services,
                                       LocalDateTime preferredDate, String notes) throws ServiceException {
         try {
             BookingModel booking = new BookingModel(
-                    null,
+                    bookingId,
                     userId,
                     petType,
                     services,
