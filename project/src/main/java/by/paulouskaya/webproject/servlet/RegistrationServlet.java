@@ -39,11 +39,6 @@ public class RegistrationServlet extends HttpServlet {
     private static final String SIGNUP_JSP = "/pages/signup.jsp";
     private static final String DASHBOARD_PATH = "/dashboard";
 
-    private static final String EMPTY_USERNAME_MSG = "Username cannot be empty";
-    private static final String EMPTY_EMAIL_MSG = "Email cannot be empty";
-    private static final String EMPTY_PASSWORD_MSG = "Password cannot be empty";
-    private static final String SYSTEM_ERROR_MSG = "System error. Please try again.";
-
     private static final String COMMA_SEPARATOR = ", ";
 
     private RegistrationServiceImpl registrationServiceImpl;
@@ -83,21 +78,21 @@ public class RegistrationServlet extends HttpServlet {
 
         if (username == null || username.isBlank()) {
             logger.warn("Empty username provided");
-            request.setAttribute(ERROR_ATTRIBUTE, EMPTY_USERNAME_MSG);
+            request.setAttribute(ERROR_ATTRIBUTE, "Username cannot be empty");
             request.getRequestDispatcher(SIGNUP_JSP).forward(request, response);
             return;
         }
 
         if (email == null || email.isBlank()) {
             logger.warn("Empty email provided");
-            request.setAttribute(ERROR_ATTRIBUTE, EMPTY_EMAIL_MSG);
+            request.setAttribute(ERROR_ATTRIBUTE, "Email cannot be empty");
             request.getRequestDispatcher(SIGNUP_JSP).forward(request, response);
             return;
         }
 
         if (password == null || password.isBlank()) {
             logger.warn("Empty password provided");
-            request.setAttribute(ERROR_ATTRIBUTE, EMPTY_PASSWORD_MSG);
+            request.setAttribute(ERROR_ATTRIBUTE, "Password cannot be empty");
             request.getRequestDispatcher(SIGNUP_JSP).forward(request, response);
             return;
         }
@@ -124,7 +119,7 @@ public class RegistrationServlet extends HttpServlet {
             response.sendRedirect(request.getContextPath() + DASHBOARD_PATH);
         } catch (ServiceException e) {
             logger.error("Database error during registration: {}", e.getMessage());
-            setError(request, SYSTEM_ERROR_MSG, username, email);
+            setError(request, "System error. Please try again.", username, email);
             forwardToRegister(request, response);
         }
     }
