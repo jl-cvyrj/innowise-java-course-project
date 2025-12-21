@@ -54,7 +54,6 @@ public class UserDaoImpl implements UserDao {
         if (user.getUserId() == 0) {
             Integer newId = nextId++;
             UserModel newUser = new UserModel(
-                newId.longValue(),
                 user.getUserName(),
                 user.getEmail(),
                 user.getHashedPassword(),

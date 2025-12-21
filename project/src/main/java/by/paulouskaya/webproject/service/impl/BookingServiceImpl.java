@@ -23,7 +23,6 @@ public class BookingServiceImpl implements BookingService {
                                       LocalDateTime preferredDate, String notes) throws ServiceException {
         try {
             BookingModel booking = new BookingModel(
-                    bookingId,
                     userId,
                     petType,
                     services,

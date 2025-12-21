@@ -21,7 +21,6 @@ public class BookingDaoImpl implements BookingDao {
 
                 Long newId = nextId++;
                 BookingModel newBooking = new BookingModel(
-                        newId,
                         booking.getUserId(),
                         booking.getPetType(),
                         booking.getServices(),

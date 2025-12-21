@@ -1,5 +1,6 @@
 package by.paulouskaya.webproject.model;
 
+import by.paulouskaya.webproject.util.UserIdGenerator;
 import jakarta.jws.soap.SOAPBinding;
 
 public class UserModel {
@@ -12,22 +13,23 @@ public class UserModel {
     private static final char SINGLE_QUOTE = '\'';
     private static final char CLOSING_BRACE = '}';
 
-    private long id;
+    private long userIdGenerated = UserIdGenerator.generateUserId();
+    private long userId;
     private String userName;
     private String email;
     private String hashedPassword;
     private UserRole role;
 
-    public UserModel(long id, String userName, String email, String hashedPassword, UserRole role) {
-        this.id = id;
+    public UserModel(String userName, String email, String hashedPassword, UserRole role) {
+        this.userId = userIdGenerated;
         this.userName = userName;
         this.email = email;
         this.hashedPassword = hashedPassword;
         this.role = role;
     }
 
-    public long getUserId() { return id; }
-    public void setUserId(int id) { this.id = id; }
+    public long getUserId() { return userId; }
+    public void setUserId(int id) { this.userId = id; }
 
     public String getUserName() { return userName; }
     public void setUserName(String userName) { this.userName = userName; }
@@ -47,7 +49,7 @@ public class UserModel {
         stringBuffer.append(HASHED_PASSWORD_FIELD).append(hashedPassword).append(SINGLE_QUOTE);
         stringBuffer.append(ROLE_FIELD).append(role).append(SINGLE_QUOTE);
         stringBuffer.append(EMAIL_FIELD).append(email).append(SINGLE_QUOTE);
-        stringBuffer.append(ID_FIELD).append(id);
+        stringBuffer.append(ID_FIELD).append(userId);
         stringBuffer.append(USER_NAME_FIELD).append(userName).append(SINGLE_QUOTE);
         stringBuffer.append(CLOSING_BRACE);
         return stringBuffer.toString();

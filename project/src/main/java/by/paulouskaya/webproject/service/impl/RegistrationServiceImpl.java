@@ -1,6 +1,5 @@
 package by.paulouskaya.webproject.service.impl;
 
-import by.paulouskaya.webproject.exception.DaoException;
 import by.paulouskaya.webproject.exception.ServiceException;
 import by.paulouskaya.webproject.model.UserModel;
 import by.paulouskaya.webproject.dao.impl.UserDaoImpl;
@@ -35,7 +34,7 @@ public class RegistrationServiceImpl implements RegistrationService {
 
         String passwordHash = PasswordHasher.hashPassword(password);
 
-        UserModel user = new UserModel(0, username, email, passwordHash, role);
+        UserModel user = new UserModel(username, email, passwordHash, role);
 
         return userDaoImpl.save(user);
     }

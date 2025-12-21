@@ -97,10 +97,10 @@ public class BookingServlet extends HttpServlet {
         String username = (String) session.getAttribute(ServletParameter.USERNAME_ATTRIBUTE);
 
         try {
-            String petTypeStr = request.getParameter(ServletParameter.PET_TYPE_PARAM);
-            String[] serviceStringList = request.getParameterValues(ServletParameter.SERVICES_PARAM);
-            String preferredDateString = request.getParameter(ServletParameter.PREFERRED_DATE_PARAM);
-            String notes = request.getParameter(ServletParameter.NOTES_PARAM);
+            String petTypeStr = request.getParameter(ServletParameter.PET_TYPE_PARAMETER);
+            String[] serviceStringList = request.getParameterValues(ServletParameter.SERVICES_PARAMETER);
+            String preferredDateString = request.getParameter(ServletParameter.PREFERRED_DATE_PARAMETER);
+            String notes = request.getParameter(ServletParameter.NOTES_PARAMETER);
 
             if (petTypeStr == null || petTypeStr.isBlank()) {
                 throw new IllegalArgumentException("Pet type is required");

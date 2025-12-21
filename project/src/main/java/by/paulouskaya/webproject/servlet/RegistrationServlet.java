@@ -38,10 +38,10 @@ public class RegistrationServlet extends HttpServlet {
     public void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        String username = request.getParameter(ServletParameter.USERNAME_PARAM);
-        String email = request.getParameter(ServletParameter.EMAIL_PARAM);
-        String password = request.getParameter(ServletParameter.PASSWORD_PARAM);
-        String roleString = request.getParameter(ServletParameter.ROLE_PARAM);
+        String username = request.getParameter(ServletParameter.USERNAME_PARAMETER);
+        String email = request.getParameter(ServletParameter.EMAIL_PARAMETER);
+        String password = request.getParameter(ServletParameter.PASSWORD_PARAMETER);
+        String roleString = request.getParameter(ServletParameter.ROLE_PARAMETER);
 
         UserRole role;
         if (roleString == null || roleString.isBlank()) {

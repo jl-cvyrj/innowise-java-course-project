@@ -1,8 +1,5 @@
 package by.paulouskaya.webproject.servlet;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 public class ServletParameter {
     public static final String SLASH = "/";
     public static final String EMPTY_PATH = "/";
@@ -13,14 +10,14 @@ public class ServletParameter {
 
     public static final String DATE_TIME_PATTERN = "yyyy-MM-dd'T'HH:mm";
 
-    public static final String USERNAME_PARAM = "username";
-    public static final String PASSWORD_PARAM = "password";
-    public static final String EMAIL_PARAM = "email";
-    public static final String ROLE_PARAM = "role";
-    public static final String PET_TYPE_PARAM = "petType";
-    public static final String SERVICES_PARAM = "services";
-    public static final String PREFERRED_DATE_PARAM = "preferredDate";
-    public static final String NOTES_PARAM = "notes";
+    public static final String USERNAME_PARAMETER = "username";
+    public static final String PASSWORD_PARAMETER = "password";
+    public static final String EMAIL_PARAMETER = "email";
+    public static final String ROLE_PARAMETER = "role";
+    public static final String PET_TYPE_PARAMETER = "petType";
+    public static final String SERVICES_PARAMETER = "services";
+    public static final String PREFERRED_DATE_PARAMETER = "preferredDate";
+    public static final String NOTES_PARAMETER = "notes";
 
     public static final String USER_ATTRIBUTE = "user";
     public static final String USER_ID_ATTRIBUTE = "userId";

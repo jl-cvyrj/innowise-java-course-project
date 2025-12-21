@@ -43,8 +43,8 @@ public class LoginServlet extends HttpServlet {
     public void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        String username = request.getParameter(ServletParameter.USERNAME_PARAM);
-        String password = request.getParameter(ServletParameter.PASSWORD_PARAM);
+        String username = request.getParameter(ServletParameter.USERNAME_PARAMETER);
+        String password = request.getParameter(ServletParameter.PASSWORD_PARAMETER);
 
         logger.info("Login attempt for username/email: {}", username);
 
