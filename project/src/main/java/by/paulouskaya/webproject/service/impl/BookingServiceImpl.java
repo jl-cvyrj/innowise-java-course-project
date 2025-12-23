@@ -19,7 +19,7 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public BookingModel createBooking(Long bookingId, Long userId, PetType petType, List<ServiceType> services,
+    public BookingModel createBooking(Long userId, PetType petType, List<ServiceType> services,
                                       LocalDateTime preferredDate, String notes) throws ServiceException {
         try {
             BookingModel booking = new BookingModel(
@@ -39,7 +39,7 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public List<BookingModel> getUserBookings(Long userId) throws ServiceException {
+    public List<BookingModel> findUserBookings(Long userId) throws ServiceException {
         try {
             return bookingDaoImpl.findByUserId(userId);
         } catch (DaoException e) {
@@ -48,7 +48,7 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public BookingModel getBookingById(Long bookingId) throws ServiceException {
+    public BookingModel findBookingById(Long bookingId) throws ServiceException {
         try {
             BookingModel booking = bookingDaoImpl.findById(bookingId);
             if (booking == null) {
@@ -83,7 +83,7 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public List<BookingModel> getAllBookings() throws ServiceException {
+    public List<BookingModel> findAllBookings() throws ServiceException {
         try {
             return bookingDaoImpl.findAll();
         } catch (DaoException e) {
@@ -169,4 +169,25 @@ public class BookingServiceImpl implements BookingService {
             throw new ServiceException("Failed to complete booking", e);
         }
     }
+
+  @Override
+  public boolean assignDateTime(Long bookingId, LocalDateTime dateTime) throws ServiceException {
+      try {
+        BookingModel booking = bookingDaoImpl.findById(bookingId);
+        if (booking == null) {
+          return false;
+        }
+
+        if (booking.getStatus()!=BookingStatus.CONFIRMED) {
+          return false;
+        }
+
+        booking.setPreferredDate(dateTime);
+        bookingDaoImpl.update(booking);
+        return true;
+
+      } catch (DaoException e) {
+        throw new ServiceException("Failed to assign data booking", e);
+      }
+  }
 }

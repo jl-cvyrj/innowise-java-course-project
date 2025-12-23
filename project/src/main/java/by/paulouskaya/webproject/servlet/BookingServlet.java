@@ -59,7 +59,7 @@ public class BookingServlet extends HttpServlet {
             logger.info("User {} (ID: {}) viewing bookings", username, userId);
 
             try {
-                List<BookingModel> bookingList = bookingService.getUserBookings(userId);
+                List<BookingModel> bookingList = bookingService.findUserBookings(userId);
                 logger.info("Found {} bookings for user {}", bookingList.size(), username);
                 request.setAttribute(ServletParameter.BOOKING_ATTRIBUTE, bookingList);
                 request.getRequestDispatcher(ServletParameter.BOOKINGS_JSP).forward(request, response);
@@ -123,7 +123,7 @@ public class BookingServlet extends HttpServlet {
                     username, petType, serviceList.size(), preferredDate);
 
             BookingModel booking = bookingService.createBooking(
-                    bookingId, userId, petType, serviceList, preferredDate, notes
+                    userId, petType, serviceList, preferredDate, notes
             );
 
             logger.info("Booking created successfully - ID: {} for user {}",
