@@ -4,8 +4,14 @@
     <title>Login</title>
 </head>
 <body>
-    <h1>Hello!</h1>
-    <a href="sighup.jsp">sigh up</a><br>
-    <a href="login.jsp">login</a>
+    <h1>Login</h1>
+    <form action="${pageContext.request.contextPath}/login" method="post">
+        Username or Email: <input type="text" name="username">
+        Password: <input type="password" name="password">
+        <button type="submit">Log In</button>
+    </form>
+    <c:if test="${not empty error}">
+        <p style="color:red">${error}</p>
+    </c:if>
 </body>
 </html>

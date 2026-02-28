@@ -1,11 +1,11 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>Login</title>
+    <title>Welcome</title>
 </head>
 <body>
-<h1>Hello!</h1>
-    <a href="pages/sighup.jsp">sigh up</a><br>
-    <a href="pages/login.jsp">login</a>
+<h1>Hello</h1>
+    <a href="${pageContext.request.contextPath}/login">log in</a><br>
+    <a href="${pageContext.request.contextPath}/register">sigh up</a>
 </body>
 </html>

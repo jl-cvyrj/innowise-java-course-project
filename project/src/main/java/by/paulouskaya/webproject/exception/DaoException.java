@@ -1,3 +1,4 @@
+
 package by.paulouskaya.webproject.exception;
 
 public class DaoException extends Exception {
