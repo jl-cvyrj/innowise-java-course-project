@@ -1,7 +1,5 @@
 package by.paulouskaya.webproject.model;
 
-import by.paulouskaya.webproject.util.BookingGeneratorId;
-
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -19,7 +17,6 @@ public class BookingModel {
     private static final char SINGLE_QUOTE = '\'';
     private static final char CLOSING_BRACE = '}';
 
-    private Long bookingIdGenerated = BookingGeneratorId.generateBookingId();
     private Long bookingId;
     private Long userId;
     private PetType petType;
@@ -31,7 +28,6 @@ public class BookingModel {
     public BookingModel(Long userId, PetType petType,
                         List<ServiceType> services, LocalDateTime preferredDate,
                         BookingStatus status, String notes) {
-        this.bookingId = bookingIdGenerated;
         this.userId = userId;
         this.petType = petType;
         this.services = services;

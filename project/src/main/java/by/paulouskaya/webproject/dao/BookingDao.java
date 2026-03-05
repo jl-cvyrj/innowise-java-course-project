@@ -15,4 +15,8 @@ public interface BookingDao {
     public List<BookingModel> findAll() throws DaoException;
 
     public boolean update(BookingModel booking) throws DaoException;
+
+    public boolean delete(Long id) throws DaoException;
+
+    public List<BookingModel> findByStatus(String status) throws DaoException;
 }

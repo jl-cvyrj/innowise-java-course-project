@@ -7,35 +7,28 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 
 public class BookingDaoImpl implements BookingDao {
     private static final Logger logger = LogManager.getLogger(BookingDaoImpl.class);
 
     private static final Map<Long, BookingModel> bookingMap = new HashMap<>();
-    private static long nextId = 1L;
+    private static final AtomicLong nextId = new AtomicLong(1);
 
     public BookingModel save(BookingModel booking) throws DaoException {
         try {
             if (booking.getBookingId() == null || booking.getBookingId() == 0) {
 
-                Long newId = nextId++;
-                BookingModel newBooking = new BookingModel(
-                        booking.getUserId(),
-                        booking.getPetType(),
-                        booking.getServices(),
-                        booking.getPreferredDate(),
-                        booking.getStatus(),
-                        booking.getNotes()
-                );
-                bookingMap.put(newId, newBooking);
+                Long newId = nextId.getAndIncrement();
+                booking.setBookingId(newId);
+                bookingMap.put(newId, booking);
                 logger.info("Booking created: ID={}, User={}", newId, booking.getUserId());
-                return newBooking;
             } else {
                 bookingMap.put(booking.getBookingId(), booking);
                 logger.info("Booking updated: ID={}", booking.getBookingId());
-                return booking;
             }
+            return booking;
         } catch (Exception e) {
             logger.error("Failed to save booking", e);
             throw new DaoException("Failed to save booking", e);
@@ -59,7 +52,7 @@ public class BookingDaoImpl implements BookingDao {
     public List<BookingModel> findByUserId(Long userId) throws DaoException {
         try {
             List<BookingModel> userBookings = bookingMap.values().stream()
-                    .filter(booking -> booking.getUserId().equals(userId))
+                    .filter(booking -> Objects.equals(booking.getUserId(), userId))
                     .sorted(Comparator.comparing(BookingModel::getPreferredDate).reversed())
                     .collect(Collectors.toList());
 
@@ -86,7 +79,8 @@ public class BookingDaoImpl implements BookingDao {
 
     public boolean update(BookingModel booking) throws DaoException {
         try {
-            if (!bookingMap.containsKey(booking.getBookingId())) {
+            if (booking.getBookingId() == null ||
+                    !bookingMap.containsKey(booking.getBookingId())) {
                 logger.warn("Cannot update non-existent booking: ID={}", booking.getBookingId());
                 throw new DaoException("Booking not found: " + booking.getBookingId());
             }
@@ -118,7 +112,9 @@ public class BookingDaoImpl implements BookingDao {
     public List<BookingModel> findByStatus(String status) throws DaoException {
         try {
             return bookingMap.values().stream()
-                    .filter(booking -> booking.getStatus().name().equals(status))
+                    .filter(booking ->
+                            booking.getStatus() != null &&
+                            booking.getStatus().name().equals(status))
                     .collect(Collectors.toList());
         } catch (Exception e) {
             throw new DaoException("Failed to find bookings by status: " + status, e);

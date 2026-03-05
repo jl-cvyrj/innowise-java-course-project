@@ -1,8 +1,5 @@
 package by.paulouskaya.webproject.model;
 
-import by.paulouskaya.webproject.util.UserIdGenerator;
-import jakarta.jws.soap.SOAPBinding;
-
 public class UserModel {
     private static final String STRING_BUFFER_START = "UserModel{";
     private static final String HASHED_PASSWORD_FIELD = "hashedPassword='";
@@ -13,23 +10,21 @@ public class UserModel {
     private static final char SINGLE_QUOTE = '\'';
     private static final char CLOSING_BRACE = '}';
 
-    private long userIdGenerated = UserIdGenerator.generateUserId();
-    private long userId;
+    private Long userId;
     private String userName;
     private String email;
     private String hashedPassword;
     private UserRole role;
 
     public UserModel(String userName, String email, String hashedPassword, UserRole role) {
-        this.userId = userIdGenerated;
         this.userName = userName;
         this.email = email;
         this.hashedPassword = hashedPassword;
         this.role = role;
     }
 
-    public long getUserId() { return userId; }
-    public void setUserId(int id) { this.userId = id; }
+    public Long getUserId() { return userId; }
+    public void setUserId(Long id) { this.userId = id; }
 
     public String getUserName() { return userName; }
     public void setUserName(String userName) { this.userName = userName; }

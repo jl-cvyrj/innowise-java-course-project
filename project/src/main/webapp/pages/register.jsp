@@ -2,37 +2,45 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <head>
-    <title>Login</title>
+    <title>User Registration</title>
     <style>
         body { font-family: Arial, sans-serif; }
         .error { color: red; }
         form { max-width: 400px; margin: 50px auto; }
         label { display: block; margin-top: 15px; }
-        input { width: 100%; padding: 8px; margin-top: 5px; }
+        input, select { width: 100%; padding: 8px; margin-top: 5px; }
         button { margin-top: 20px; padding: 10px; width: 100%; }
-        a { text-decoration: none; color: blue; }
-        a:hover { text-decoration: underline; }
     </style>
 </head>
 <body>
-<h1>Login</h1>
+<h1>Register</h1>
 
 <c:if test="${not empty error}">
     <p class="error">${error}</p>
 </c:if>
 
-<form action="${pageContext.request.contextPath}/login" method="post">
-    <label for="username">Username or Email:</label>
+<form action="${pageContext.request.contextPath}/register" method="post">
+    <label for="username">Username:</label>
     <input type="text" id="username" name="username"
            value="${preservedUsername != null ? preservedUsername : ''}" required>
+
+    <label for="email">Email:</label>
+    <input type="email" id="email" name="email"
+           value="${preservedEmail != null ? preservedEmail : ''}" required>
 
     <label for="password">Password:</label>
     <input type="password" id="password" name="password" required>
 
-    <button type="submit">Log In</button>
+    <label for="role">Role:</label>
+    <select id="role" name="role">
+        <option value="CLIENT" selected>Client</option>
+        <option value="ADMIN">Admin</option>
+    </select>
+
+    <button type="submit">Register</button>
 </form>
 
-<p>Don't have an account? <a href="${pageContext.request.contextPath}/register">Register here</a></p>
+<p>Already have an account? <a href="${pageContext.request.contextPath}/login">Login here</a></p>
 
 </body>
 </html>
