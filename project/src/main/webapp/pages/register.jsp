@@ -1,5 +1,4 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <head>
     <title>User Registration</title>
@@ -15,18 +14,25 @@
 <body>
 <h1>Register</h1>
 
-<c:if test="${not empty error}">
-    <p class="error">${error}</p>
-</c:if>
+<%
+    String error = (String) request.getAttribute("error");
+    String preservedUsername = (String) request.getAttribute("preservedUsername");
+    String preservedEmail = (String) request.getAttribute("preservedEmail");
+    if (error != null && !error.isEmpty()) {
+%>
+<p class="error"><%= error %></p>
+<%
+    }
+%>
 
-<form action="${pageContext.request.contextPath}/register" method="post">
+<form action="<%= request.getContextPath() %>/register" method="post">
     <label for="username">Username:</label>
     <input type="text" id="username" name="username"
-           value="${preservedUsername != null ? preservedUsername : ''}" required>
+           value="<%= preservedUsername != null ? preservedUsername : "" %>" required>
 
     <label for="email">Email:</label>
     <input type="email" id="email" name="email"
-           value="${preservedEmail != null ? preservedEmail : ''}" required>
+           value="<%= preservedEmail != null ? preservedEmail : "" %>" required>
 
     <label for="password">Password:</label>
     <input type="password" id="password" name="password" required>
@@ -40,7 +46,7 @@
     <button type="submit">Register</button>
 </form>
 
-<p>Already have an account? <a href="${pageContext.request.contextPath}/login">Login here</a></p>
+<p>Already have an account? <a href="<%= request.getContextPath() %>/login">Login here</a></p>
 
 </body>
 </html>
