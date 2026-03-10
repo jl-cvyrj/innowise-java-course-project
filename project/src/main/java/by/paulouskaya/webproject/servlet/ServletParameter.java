@@ -43,7 +43,6 @@ public class ServletParameter {
 
   public static final String LOGIN_JSP = "/pages/login.jsp";
   public static final String REGISTER_JSP = "/pages/register.jsp";
-  public static final String SIGNUP_JSP = "/pages/signup.jsp";
   public static final String BOOKINGS_JSP = "/pages/booking.jsp";
   public static final String NEW_BOOKING_JSP = "/pages/new-booking.jsp";
   public static final String ADMIN_BOOKINGS_JSP = "/pages/admin-bookings.jsp";

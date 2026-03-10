@@ -23,6 +23,7 @@ public class RegistrationServlet extends HttpServlet {
 
     private RegistrationServiceImpl registrationServiceImpl;
 
+    @Override
     public void init() {
         registrationServiceImpl = new RegistrationServiceImpl();
     }
@@ -30,8 +31,8 @@ public class RegistrationServlet extends HttpServlet {
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        logger.info("GET request to registration page");
-        request.getRequestDispatcher(ServletParameter.REGISTER_JSP).forward(request, response);
+        logger.info("GET /register called");
+        request.getRequestDispatcher("/pages/register.jsp").forward(request, response);
     }
 
     @Override
@@ -44,76 +45,48 @@ public class RegistrationServlet extends HttpServlet {
         String roleString = request.getParameter(ServletParameter.ROLE_PARAMETER);
 
         UserRole role;
-        if (roleString == null || roleString.isBlank()) {
+        try {
+            role = (roleString != null && !roleString.isBlank()) ? UserRole.valueOf(roleString.toUpperCase()) : UserRole.CLIENT;
+        } catch (IllegalArgumentException e) {
             role = UserRole.CLIENT;
-        } else {
-            try {
-                role = UserRole.valueOf(roleString.toUpperCase());
-            } catch (IllegalArgumentException e) {
-                role = UserRole.CLIENT;
-            }
         }
 
-        logger.info("Registration attempt for username: {}", username);
-
-        if (username == null || username.isBlank()) {
-            logger.warn("Empty username provided");
-            request.setAttribute(ServletParameter.ERROR_ATTRIBUTE, "Username cannot be empty");
-            request.getRequestDispatcher(ServletParameter.SIGNUP_JSP).forward(request, response);
-            return;
-        }
-
-        if (email == null || email.isBlank()) {
-            logger.warn("Empty email provided");
-            request.setAttribute(ServletParameter.ERROR_ATTRIBUTE, "Email cannot be empty");
-            request.getRequestDispatcher(ServletParameter.SIGNUP_JSP).forward(request, response);
-            return;
-        }
-
-        if (password == null || password.isBlank()) {
-            logger.warn("Empty password provided");
-            request.setAttribute(ServletParameter.ERROR_ATTRIBUTE, "Password cannot be empty");
-            request.getRequestDispatcher(ServletParameter.SIGNUP_JSP).forward(request, response);
+        if (username == null || username.isBlank() || email == null || email.isBlank() || password == null || password.isBlank()) {
+            request.setAttribute(ServletParameter.ERROR_ATTRIBUTE, "All fields are required");
+            request.setAttribute(ServletParameter.PRESERVED_USERNAME_ATTRIBUTE, username);
+            request.setAttribute(ServletParameter.PRESERVED_EMAIL_ATTRIBUTE, email);
+            request.getRequestDispatcher("/pages/register.jsp").forward(request, response);
             return;
         }
 
         List<String> passwordErrors = PasswordValidator.validatePassword(password);
         if (!passwordErrors.isEmpty()) {
-            String errorMessage = String.join(ServletParameter.COMMA_SEPARATOR, passwordErrors);
-            setError(request, errorMessage, username, email);
-            forwardToRegister(request, response);
+            request.setAttribute(ServletParameter.ERROR_ATTRIBUTE, String.join(", ", passwordErrors));
+            request.setAttribute(ServletParameter.PRESERVED_USERNAME_ATTRIBUTE, username);
+            request.setAttribute(ServletParameter.PRESERVED_EMAIL_ATTRIBUTE, email);
+            request.getRequestDispatcher("/pages/register.jsp").forward(request, response);
             return;
         }
 
         try {
             UserModel user = registrationServiceImpl.register(username, email, password, role);
 
-            logger.info("Successfully registered user: {} (ID: {})", username, user.getUserId());
-
             HttpSession session = request.getSession();
             session.setAttribute(ServletParameter.USER_ATTRIBUTE, user);
             session.setAttribute(ServletParameter.USER_ID_ATTRIBUTE, user.getUserId());
             session.setAttribute(ServletParameter.USERNAME_ATTRIBUTE, user.getUserName());
             session.setAttribute(ServletParameter.USER_ROLE_ATTRIBUTE, user.getRole());
+            session.setMaxInactiveInterval(ServletParameter.SESSION_TIMEOUT_SECONDS);
 
+            logger.info("User {} registered successfully", username);
             response.sendRedirect(request.getContextPath() + ServletParameter.DASHBOARD_PATH);
+
         } catch (ServiceException e) {
-            logger.error("Database error during registration: {}", e.getMessage());
-            setError(request, "System error. Please try again.", username, email);
-            forwardToRegister(request, response);
+            logger.error("Error during registration: {}", e.getMessage());
+            request.setAttribute(ServletParameter.ERROR_ATTRIBUTE, "System error. Please try again.");
+            request.setAttribute(ServletParameter.PRESERVED_USERNAME_ATTRIBUTE, username);
+            request.setAttribute(ServletParameter.PRESERVED_EMAIL_ATTRIBUTE, email);
+            request.getRequestDispatcher("/pages/register.jsp").forward(request, response);
         }
-    }
-
-    private void setError(HttpServletRequest request, String error,
-                          String username, String email) {
-        request.setAttribute(ServletParameter.ERROR_ATTRIBUTE, error);
-        request.setAttribute(ServletParameter.PRESERVED_USERNAME_ATTRIBUTE, username);
-        request.setAttribute(ServletParameter.PRESERVED_EMAIL_ATTRIBUTE, email);
-    }
-
-    private void forwardToRegister(HttpServletRequest request,
-                                   HttpServletResponse response)
-            throws ServletException, IOException {
-        request.getRequestDispatcher(ServletParameter.REGISTER_JSP).forward(request, response);
     }
 }
