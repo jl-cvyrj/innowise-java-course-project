@@ -3,15 +3,15 @@ package by.paulouskaya.webproject.service.impl;
 import by.paulouskaya.webproject.exception.DaoException;
 import by.paulouskaya.webproject.exception.ServiceException;
 import by.paulouskaya.webproject.model.UserModel;
-import by.paulouskaya.webproject.dao.impl.UserDaoImpl;
+import by.paulouskaya.webproject.dao.impl.UserDaoJdbcImpl;
 import by.paulouskaya.webproject.service.LoginService;
 import by.paulouskaya.webproject.util.PasswordHasher;
 
 public class LoginServiceImpl implements LoginService {
-    private final UserDaoImpl userDaoImpl;
+    private final UserDaoJdbcImpl userDaoImpl;
 
     public LoginServiceImpl() {
-        this.userDaoImpl = new UserDaoImpl();
+        this.userDaoImpl = new UserDaoJdbcImpl();
     }
 
     public UserModel authenticate(String username, String password) throws ServiceException {

@@ -12,9 +12,8 @@ import java.util.Queue;
 public class ConnectionPool {
 
   private static final Logger logger = LogManager.getLogger(ConnectionPool.class);
-  private static final String URL = "jdbc:mysql://localhost:3306/web_project";
-  private static final String USER = "root";
-  private static final String PASSWORD = "1234";
+  private static final String URL = "jdbc:mariadb://localhost:3306/webproject_db?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC";  private static final String USER = "root";
+  private static final String PASSWORD = "99ui";
 
   private static final int POOL_SIZE = 10;
   private static ConnectionPool instance;
@@ -22,7 +21,7 @@ public class ConnectionPool {
 
   static {
     try {
-      Class.forName("com.mysql.cj.jdbc.Driver");
+      Class.forName("org.mariadb.jdbc.Driver");
       logger.info("JDBC Driver loaded");
     } catch (ClassNotFoundException e) {
       throw new ExceptionInInitializerError(e);

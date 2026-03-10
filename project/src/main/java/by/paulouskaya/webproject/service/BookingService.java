@@ -20,5 +20,6 @@ public interface BookingService {
     boolean rejectBooking(Long bookingId) throws ServiceException;
     boolean completeBooking(Long bookingId) throws ServiceException;
     boolean assignDateTime(Long bookingId, LocalDateTime dateTime) throws ServiceException;
-
+    boolean updateBooking(BookingModel booking) throws ServiceException;
+    boolean deleteBooking(Long bookingId) throws ServiceException;
 }

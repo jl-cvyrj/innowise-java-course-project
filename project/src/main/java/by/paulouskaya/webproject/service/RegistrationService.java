@@ -7,5 +7,5 @@ import by.paulouskaya.webproject.model.UserRole;
 
 public interface RegistrationService {
     UserModel register(String username, String email, String password, UserRole role)
-            throws ServiceException;
+            throws ServiceException, DaoException;
 }

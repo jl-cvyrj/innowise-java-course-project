@@ -10,9 +10,9 @@ public interface UserDao {
 
   public UserModel findById(Long id) throws DaoException;
 
-  public boolean existsByUsername(String username);
+  public boolean existsByUsername(String username) throws DaoException;
 
-  public boolean existsByEmail(String email);
+  public boolean existsByEmail(String email) throws DaoException;
 
   public UserModel save(UserModel user) throws DaoException;
 

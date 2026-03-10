@@ -1,21 +1,21 @@
 package by.paulouskaya.webproject.service.impl;
 
+import by.paulouskaya.webproject.dao.impl.BookingDaoJdbcImpl;
 import by.paulouskaya.webproject.exception.DaoException;
 import by.paulouskaya.webproject.model.BookingModel;
 import by.paulouskaya.webproject.model.PetType;
 import by.paulouskaya.webproject.model.ServiceType;
 import by.paulouskaya.webproject.model.BookingStatus;
-import by.paulouskaya.webproject.dao.impl.BookingDaoImpl;
 import by.paulouskaya.webproject.exception.ServiceException;
 import by.paulouskaya.webproject.service.BookingService;
 import java.time.LocalDateTime;
 import java.util.List;
 
 public class BookingServiceImpl implements BookingService {
-    private final BookingDaoImpl bookingDaoImpl;
+    private final BookingDaoJdbcImpl bookingDaoImpl;
 
-    public BookingServiceImpl() {
-        this.bookingDaoImpl = new BookingDaoImpl();
+    public BookingServiceImpl() throws DaoException {
+        this.bookingDaoImpl = new BookingDaoJdbcImpl();
     }
 
     @Override
@@ -190,4 +190,22 @@ public class BookingServiceImpl implements BookingService {
         throw new ServiceException("Failed to assign data booking", e);
       }
   }
+
+    @Override
+    public boolean updateBooking(BookingModel booking) throws ServiceException {
+        try {
+            return bookingDaoImpl.update(booking);
+        } catch (DaoException e) {
+            throw new ServiceException("Failed to update booking", e);
+        }
+    }
+
+    @Override
+    public boolean deleteBooking(Long bookingId) throws ServiceException {
+        try {
+            return bookingDaoImpl.delete(bookingId);
+        } catch (DaoException e) {
+            throw new ServiceException("Failed to delete booking", e);
+        }
+    }
 }

@@ -27,11 +27,12 @@ public enum ServiceType {
         return price;
     }
 
-    public static ServiceType fromString(String name) {
-        try {
-            return ServiceType.valueOf(name.toUpperCase());
-        } catch (IllegalArgumentException e) {
-            return null;
+    public static ServiceType fromDisplayName(String displayName) {
+        for (ServiceType s : values()) {
+            if (s.getDisplayName().equalsIgnoreCase(displayName.trim())) {
+                return s;
+            }
         }
+        return null;
     }
 }

@@ -35,8 +35,12 @@ public class AdminBookingServlet extends HttpServlet  {
 
   @Override
   public void init() {
-    bookingService = new BookingServiceImpl();
-    logger.info("BookingServlet initialized");
+      try {
+          bookingService = new BookingServiceImpl();
+      } catch (DaoException e) {
+          throw new RuntimeException(e);
+      }
+      logger.info("BookingServlet initialized");
   }
 
   @Override

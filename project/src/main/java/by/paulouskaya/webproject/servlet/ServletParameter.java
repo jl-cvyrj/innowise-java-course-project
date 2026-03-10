@@ -41,6 +41,7 @@ public class ServletParameter {
   public static final String ACTION_COMPLETE_ATTRIBUTE = "complete";
   public static final String ACTION_ASSIGN_DATE_TIME_ATTRIBUTE = "assign_data_time";
 
+  public static final String EDIT_BOOKING_JSP = "/pages/edit-booking.jsp";
   public static final String LOGIN_JSP = "/pages/login.jsp";
   public static final String REGISTER_JSP = "/pages/register.jsp";
   public static final String BOOKINGS_JSP = "/pages/booking.jsp";

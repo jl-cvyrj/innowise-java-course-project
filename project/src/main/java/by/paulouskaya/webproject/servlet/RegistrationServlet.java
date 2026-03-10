@@ -1,5 +1,6 @@
 package by.paulouskaya.webproject.servlet;
 
+import by.paulouskaya.webproject.exception.DaoException;
 import by.paulouskaya.webproject.exception.ServiceException;
 import by.paulouskaya.webproject.model.UserModel;
 import by.paulouskaya.webproject.model.UserRole;
@@ -32,7 +33,7 @@ public class RegistrationServlet extends HttpServlet {
     public void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         logger.info("GET /register called");
-        request.getRequestDispatcher("/pages/register.jsp").forward(request, response);
+        request.getRequestDispatcher(ServletParameter.REGISTER_JSP).forward(request, response);
     }
 
     @Override
@@ -55,7 +56,7 @@ public class RegistrationServlet extends HttpServlet {
             request.setAttribute(ServletParameter.ERROR_ATTRIBUTE, "All fields are required");
             request.setAttribute(ServletParameter.PRESERVED_USERNAME_ATTRIBUTE, username);
             request.setAttribute(ServletParameter.PRESERVED_EMAIL_ATTRIBUTE, email);
-            request.getRequestDispatcher("/pages/register.jsp").forward(request, response);
+            request.getRequestDispatcher(ServletParameter.REGISTER_JSP).forward(request, response);
             return;
         }
 
@@ -64,7 +65,7 @@ public class RegistrationServlet extends HttpServlet {
             request.setAttribute(ServletParameter.ERROR_ATTRIBUTE, String.join(", ", passwordErrors));
             request.setAttribute(ServletParameter.PRESERVED_USERNAME_ATTRIBUTE, username);
             request.setAttribute(ServletParameter.PRESERVED_EMAIL_ATTRIBUTE, email);
-            request.getRequestDispatcher("/pages/register.jsp").forward(request, response);
+            request.getRequestDispatcher(ServletParameter.REGISTER_JSP).forward(request, response);
             return;
         }
 
@@ -86,7 +87,9 @@ public class RegistrationServlet extends HttpServlet {
             request.setAttribute(ServletParameter.ERROR_ATTRIBUTE, "System error. Please try again.");
             request.setAttribute(ServletParameter.PRESERVED_USERNAME_ATTRIBUTE, username);
             request.setAttribute(ServletParameter.PRESERVED_EMAIL_ATTRIBUTE, email);
-            request.getRequestDispatcher("/pages/register.jsp").forward(request, response);
+            request.getRequestDispatcher(ServletParameter.REGISTER_JSP).forward(request, response);
+        } catch (DaoException e) {
+            throw new ServletException(e);
         }
     }
 }

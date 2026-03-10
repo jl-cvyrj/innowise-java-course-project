@@ -1,8 +1,9 @@
 package by.paulouskaya.webproject.service.impl;
 
+import by.paulouskaya.webproject.exception.DaoException;
 import by.paulouskaya.webproject.exception.ServiceException;
 import by.paulouskaya.webproject.model.UserModel;
-import by.paulouskaya.webproject.dao.impl.UserDaoImpl;
+import by.paulouskaya.webproject.dao.impl.UserDaoJdbcImpl;
 import by.paulouskaya.webproject.model.UserRole;
 import by.paulouskaya.webproject.service.RegistrationService;
 import by.paulouskaya.webproject.util.PasswordHasher;
@@ -10,14 +11,14 @@ import by.paulouskaya.webproject.util.PasswordValidator;
 import java.util.List;
 
 public class RegistrationServiceImpl implements RegistrationService {
-    private final UserDaoImpl userDaoImpl;
+    private final UserDaoJdbcImpl userDaoImpl;
 
     public RegistrationServiceImpl() {
-        this.userDaoImpl = new UserDaoImpl();
+        this.userDaoImpl = new UserDaoJdbcImpl();
     }
 
     public UserModel register(String username, String email, String password, UserRole role)
-            throws ServiceException {
+            throws ServiceException, DaoException {
 
         if (userDaoImpl.existsByUsername(username)) {
             throw new ServiceException("Username already exists: " + username);

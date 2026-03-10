@@ -48,6 +48,11 @@
         <td><%= b.getPreferredDate() %></td>
         <td class="status-<%= b.getStatus().name().toLowerCase() %>"><%= b.getStatus() %></td>
         <td><%= b.getNotes() %></td>
+        <td>
+            <a href="<%= request.getContextPath() %>/booking/edit?id=<%= b.getBookingId() %>">Edit</a>
+            <a href="<%= request.getContextPath() %>/booking/delete/<%= b.getBookingId() %>"
+               onclick="return confirm('Are you sure you want to delete this booking?');">Delete</a>
+        </td>
     </tr>
     <%
         }

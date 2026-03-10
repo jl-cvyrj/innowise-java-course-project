@@ -37,7 +37,7 @@ public class LoginServlet extends HttpServlet {
             return;
         }
 
-        request.getRequestDispatcher("/pages/login.jsp").forward(request, response);
+        request.getRequestDispatcher(ServletParameter.LOGIN_JSP).forward(request, response);
     }
 
     @Override
@@ -49,7 +49,7 @@ public class LoginServlet extends HttpServlet {
 
         if (username == null || username.isBlank() || password == null || password.isBlank()) {
             request.setAttribute(ServletParameter.ERROR_ATTRIBUTE, "Username and password cannot be empty");
-            request.getRequestDispatcher("/pages/login.jsp").forward(request, response);
+            request.getRequestDispatcher(ServletParameter.LOGIN_JSP).forward(request, response);
             return;
         }
 
@@ -69,7 +69,7 @@ public class LoginServlet extends HttpServlet {
         } catch (ServiceException e) {
             logger.warn("Authentication failed for username {}: {}", username, e.getMessage());
             request.setAttribute(ServletParameter.ERROR_ATTRIBUTE, "Invalid username or password");
-            request.getRequestDispatcher("/pages/login.jsp").forward(request, response);
+            request.getRequestDispatcher(ServletParameter.LOGIN_JSP).forward(request, response);
         }
     }
 }
